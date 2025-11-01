@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - Malla Interactiva</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo simple de wireframe: todo en escala de grises y con bordes punteados */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .wireframe-box {
+            border: 2px dashed #9ca3af; /* gray-400 */
+            background-color: #f3f4f6; /* gray-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .wireframe-nav a.active {
+            font-weight: bold;
+            color: #111827; /* gray-900 */
+            border-bottom: 2px solid #111827;
+        }
+        .wireframe-nav a {
+            color: #4b5563; /* gray-600 */
+        }
+        .wireframe-button {
+            border: 2px solid #4b5563;
+            background-color: #e5e7eb; /* gray-200 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+        }
+        .wireframe-placeholder {
+            border: 2px dashed #9ca3af;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Contenedor principal de la App -->
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Barra de Navegación Lateral (Navegación Primaria) -->
+        <nav class="wireframe-nav w-full md:w-64 bg-gray-100 p-4 border-r border-gray-300">
+            <h2 class="text-xl font-bold mb-6 text-gray-900">[ Logo App Malla ]</h2>
+            <ul class="space-y-4">
+                <li><a href="#dashboard" class="block" onclick="showPage('dashboard')">1.0 Inicio (Dashboard)</a></li>
+                <li><a href="#avance" class="block" onclick="showPage('avance')">2.0 Mi Avance</a></li>
+                <li><a href="#planificar" class="block active" onclick="showPage('planificar')">3.0 Planificar</a></li>
+                <li><a href="#comunidad" class="block" onclick="showPage('comunidad')">4.0 Comunidad</a></li>
+                <li><a href="#perfil" class="block" onclick="showPage('perfil')">5.0 Mi Perfil</a></li>
+            </ul>
+            <div class="absolute bottom-4 left-4">
+                <div class="wireframe-box text-sm p-2">
+                    Usuario: Catalina P.
+                    <a href="#" class="text-blue-700 underline block mt-1">Cerrar Sesión</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Área de Contenido Principal -->
+        <main class="flex-1 p-6 md:p-10 bg-white">
+
+            <!-- ======================================= -->
+            <!-- PÁGINA 1: DASHBOARD (INICIO)            -->
+            <!-- ======================================= -->
+            <div id="page-dashboard" class="page-content hidden">
+                <h1 class="text-3xl font-bold mb-6">1.0 Inicio (Dashboard)</h1>
+                <p class="text-gray-600 mb-8">Bienvenida, Catalina. Aquí tienes tu resumen.</p>
+                
+                <!-- Resumen de Catalina -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="wireframe-box p-6">
+                        <span class="text-gray-600">Promedio Ponderado</span>
+                        <h2 class="text-5xl font-bold text-gray-900">5.78</h2>
+                    </div>
+                    <div class="wireframe-box p-6">
+                        <span class="text-gray-600">Créditos Aprobados</span>
+                        <h2 class="text-5xl font-bold text-gray-900">180 / 240</h2>
+                    </div>
+                    <div class="wireframe-box p-6">
+                        <span class="text-gray-600">Ramos Inscritos (Semestre)</span>
+                        <h2 class="text-5xl font-bold text-gray-900">5</h2>
+                    </div>
+                </div>
+
+                <!-- Widget de Horario -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">1.2 Mi Horario Actual</h3>
+                    <div class="wireframe-placeholder h-64">
+                        [ Widget: Grilla de Horario Semanal ]
+                    </div>
+                </div>
+
+                <!-- Atajos -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">1.3 Atajos</h3>
+                    <div class="flex space-x-4">
+                        <button class="wireframe-button text-lg" onclick="showPage('planificar')">Ir a Planificar</button>
+                        <button class="wireframe-button text-lg" onclick="showModal('simulador')">Simulación Rápida</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- PÁGINA 2: MI AVANCE                     -->
+            <!-- ======================================= -->
+            <div id="page-avance" class="page-content hidden">
+                <h1 class="text-3xl font-bold mb-6">2.0 Mi Avance</h1>
+                
+                <h3 class="text-2xl font-semibold mb-4">2.1 Historial de Notas</h3>
+                <div class="wireframe-box p-0">
+                    <!-- Placeholder de Tabla de Historial -->
+                    <table class="w-full text-left">
+                        <thead class="border-b-2 border-dashed border-gray-400">
+                            <tr>
+                                <th class="p-4">Código</th>
+                                <th class="p-4">Ramo</th>
+                                <th class="p-4">Semestre</th>
+                                <th class="p-4">Nota Final</th>
+                                <th class="p-4">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-dashed border-gray-300">
+                                <td class="p-4">IN1001</td>
+                                <td class="p-4">Programación</td>
+                                <td class="p-4">2023-1</td>
+                                <td class="p-4">6.5</td>
+                                <td class="p-4 text-green-700">Aprobado</td>
+                            </tr>
+                            <tr class="border-b border-dashed border-gray-300">
+                                <td class="p-4">IN1002</td>
+                                <td class="p-4">Cálculo I</td>
+                                <td class="p-4">2023-1</td>
+                                <td class="p-4">5.0</td>
+                                <td class="p-4 text-green-700">Aprobado</td>
+                            </tr>
+                            <tr class="border-b border-dashed border-gray-300">
+                                <td class="p-4">IN2001</td>
+                                <td class="p-4">Bases de Datos</td>
+                                <td class="p-4">2023-2</td>
+                                <td class="p-4">...</td>
+                                <td class="p-4 text-blue-700">Cursando</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-semibold mt-8 mb-4">2.2 Malla Completa (Visualización)</h3>
+                <div class="wireframe-placeholder h-96">
+                    [ Gráfico de Malla Interactiva Completa (Solo Vista) ]
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- PÁGINA 3: PLANIFICAR                  -->
+            <!-- ======================================= -->
+            <div id="page-planificar" class="page-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold">3.1 Planificador Semestral</h1>
+                    <div class="flex space-x-2">
+                        <button class="wireframe-button" onclick="showModal('simulador')">3.2 Simular Promedio</button>
+                        <button class="wireframe-button bg-blue-200 border-blue-500">Guardar Planificación</button>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-8">Arrastra ramos de la malla a tu horario para planificar el Semestre 2026-1.</p>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Columna de Malla -->
+                    <div class="w-full md:w-1/2">
+                        <h3 class="text-2xl font-semibold mb-4">Ramos Disponibles (Semestre 6)</h3>
+                        <div class="wireframe-box space-y-3 p-4">
+                            <div class="wireframe-button cursor-grab bg-white">IN3001 - Ing. de Software</div>
+                            <div class="wireframe-button cursor-grab bg-white">IN3002 - Redes</div>
+                            <div class="wireframe-button cursor-not-allowed bg-gray-300 text-gray-500 line-through">IN3003 - Sist. Operativos (Prerreq: IN2005)</div>
+                            <div class="wireframe-button cursor-grab bg-white">FG1001 - Formación General I</div>
+                        </div>
+                    </div>
+                    <!-- Columna de Horario -->
+                    <div class="w-full md:w-1/2">
+                        <h3 class="text-2xl font-semibold mb-4">3.1.1 Vista de Horario</h3>
+                        <div class="wireframe-placeholder h-96">
+                            [ Grilla de Horario Semanal ]
+                            <div class="wireframe-box bg-blue-100 border-blue-400 p-2 m-4">
+                                IN3001 - Ing. de Software
+                                <br>
+                                (L-W 10:00-11:30)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- PÁGINA 4: COMUNIDAD                   -->
+            <!-- ======================================= -->
+            <div id="page-comunidad" class="page-content hidden">
+                <h1 class="text-3xl font-bold mb-6">4.0 Comunidad</h1>
+                <div class="wireframe-box text-left">
+                    <h3 class="text-2xl font-semibold mb-4">4.1 Apuntes y Consejos (IN3001)</h3>
+                    <p class="text-gray-600 mb-4">Buscando apuntes para: [Input de Búsqueda]</p>
+                    <div class="wireframe-box bg-white p-4 mb-4">
+                        <h4 class="font-bold">Resumen Prueba 1 (por ivan.g)</h4>
+                        <p class="text-sm text-gray-600">"Ojo con la materia de diagramas, el profe preguntó..."</p>
+                    </div>
+                    <div class="wireframe-box bg-white p-4">
+                        <h4 class="font-bold">Apuntes Clases (por catalina.p)</h4>
+                        <p class="text-sm text-gray-600">"Aquí está el PDF completo de la unidad 1..."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- PÁGINA 5: PERFIL                      -->
+            <!-- ======================================= -->
+            <div id="page-perfil" class="page-content hidden">
+                <h1 class="text-3xl font-bold mb-6">5.0 Mi Perfil</h1>
+                <div class="wireframe-box text-left max-w-lg">
+                    <h3 class="text-2xl font-semibold mb-4">5.1 Notificaciones</h3>
+                    <div class="flex items-center justify-between mb-2">
+                        <label>Notificarme sobre fechas de pruebas</label>
+                        [Checkbox Toggle]
+                    </div>
+                    <div class="flex items-center justify-between mb-6">
+                        <label>Notificarme sobre cupos liberados</label>
+                        [Checkbox Toggle]
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold mb-4">5.2 Sincronizar Calendario</h3>
+                    <button class="wireframe-button">Conectar con Google Calendar</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ======================================= -->
+    <!-- MODAL: SIMULADOR DE NOTAS               -->
+    <!-- ======================================= -->
+    <div id="modal-simulador" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="wireframe-box bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-left">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">3.2 Simulador de Promedio</h2>
+                <button class="text-2xl" onclick="hideModal('simulador')">&times;</button>
+            </div>
+            <p class="text-gray-600 mb-6">Ingresa las notas que *esperas* sacar en los ramos que estás cursando para ver tu nuevo promedio ponderado.</p>
+            
+            <!-- Formulario de simulación -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <label>IN2001 - Bases de Datos</label>
+                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="6.0">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label>IN2005 - Estructura de Datos</label>
+                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="5.5">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label>FG2001 - Formación General</label>
+                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="5.0">
+                </div>
+            </div>
+
+            <!-- Resultado -->
+            <div class="mt-8 pt-6 border-t-2 border-dashed border-gray-400">
+                <span class="text-gray-600">Tu nuevo promedio ponderado sería:</span>
+                <h3 class="text-4xl font-bold text-blue-700">5.85</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Lógica simple de JS para mostrar/ocultar páginas y modales
+        let currentPage = 'planificar';
+
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            // Mostrar la página solicitada
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            
+            // Actualizar estado activo en la nav
+            document.querySelectorAll('.wireframe-nav a').forEach(a => {
+                a.classList.remove('active');
+            });
+            document.querySelector(`.wireframe-nav a[href="#${pageId}"]`).classList.add('active');
+            
+            currentPage = pageId;
+        }
+
+        function showModal(modalId) {
+            document.getElementById('modal-' + modalId).classList.remove('hidden');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById('modal-' + modalId).classList.add('hidden');
+        }
+
+        // Mostrar la página de planificación por defecto
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('planificar');
+        });
+    </script>
+</body>
+</html>

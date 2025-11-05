@@ -3,317 +3,730 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wireframe - Malla Interactiva</title>
-    <!-- Carga de Tailwind CSS -->
+    <title>ClickMalla - Prototipo</title>
+    <!-- Cargar Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cargar Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilo simple de wireframe: todo en escala de grises y con bordes punteados */
+        /* Aplicar fuente Inter a todo el documento */
         body {
             font-family: 'Inter', sans-serif;
         }
-        .wireframe-box {
-            border: 2px dashed #9ca3af; /* gray-400 */
-            background-color: #f3f4f6; /* gray-100 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            text-align: center;
+        /* Ocultar scrollbars en webkit (Chrome, Safari) */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        .wireframe-nav a.active {
-            font-weight: bold;
-            color: #111827; /* gray-900 */
-            border-bottom: 2px solid #111827;
+        /* Ocultar scrollbars en Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE y Edge */
+            scrollbar-width: none;  /* Firefox */
         }
-        .wireframe-nav a {
-            color: #4b5563; /* gray-600 */
+        /* Estilo para el ramo en la malla (para simular interacción) */
+        .ramo-malla {
+            transition: all 0.2s ease-in-out;
         }
-        .wireframe-button {
-            border: 2px solid #4b5563;
-            background-color: #e5e7eb; /* gray-200 */
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            text-align: center;
-            cursor: pointer;
-        }
-        .wireframe-placeholder {
-            border: 2px dashed #9ca3af;
-            background-color: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-            border-radius: 0.5rem;
+        .ramo-malla:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
-<body class="bg-white text-gray-800">
+<body class="bg-gray-100">
 
-    <!-- Contenedor principal de la App -->
-    <div class="flex flex-col md:flex-row min-h-screen">
-        
-        <!-- Barra de Navegación Lateral (Navegación Primaria) -->
-        <nav class="wireframe-nav w-full md:w-64 bg-gray-100 p-4 border-r border-gray-300">
-            <h2 class="text-xl font-bold mb-6 text-gray-900">[ Logo App Malla ]</h2>
-            <ul class="space-y-4">
-                <li><a href="#dashboard" class="block" onclick="showPage('dashboard')">1.0 Inicio (Dashboard)</a></li>
-                <li><a href="#avance" class="block" onclick="showPage('avance')">2.0 Mi Avance</a></li>
-                <li><a href="#planificar" class="block active" onclick="showPage('planificar')">3.0 Planificar</a></li>
-                <li><a href="#comunidad" class="block" onclick="showPage('comunidad')">4.0 Comunidad</a></li>
-                <li><a href="#perfil" class="block" onclick="showPage('perfil')">5.0 Mi Perfil</a></li>
-            </ul>
-            <div class="absolute bottom-4 left-4">
-                <div class="wireframe-box text-sm p-2">
-                    Usuario: Catalina P.
-                    <a href="#" class="text-blue-700 underline block mt-1">Cerrar Sesión</a>
-                </div>
+    <div>
+        <!-- INICIO: Navegación Lateral (Visible en Escritorio) -->
+        <div class="fixed inset-y-0 left-0 z-30 w-64 transform bg-blue-900 text-white p-6 transition-transform duration-300 ease-in-out hidden md:block">
+            <div class="flex items-center space-x-3 mb-10">
+                <!-- Icono de App (Placeholder) -->
+                <svg class="w-10 h-10 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.906 59.906 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.717 50.717 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443a55.378 55.378 0 0 1 5.25 2.882V15M12 21a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675a55.378 55.378 0 0 1-5.25-2.882V15" />
+                </svg>
+                <span class="text-2xl font-bold">ClickMalla</span>
             </div>
-        </nav>
+            
+            <nav class="flex flex-col h-full justify-between">
+                <!-- Menú Principal -->
+                <ul class="space-y-3">
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-inicio">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+                            <span class="font-medium">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-progreso">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
+                            <span class="font-medium">Mi Progreso</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-malla">
+                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
+                            <span class="font-medium">Malla Curricular</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-planificar">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+                            <span class="font-medium">Planificar Horario</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-comunidad">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 18 18.72m-12 0a9.094 9.094 0 0 1 3.741-.479 3 3 0 0 1-3-5.479m0 0a3 3 0 0 0 3 5.479M6 18.72A9.095 9.095 0 0 0 6 18.72m0-12.24a3 3 0 0 0 0 5.479 3 3 0 0 1 0 5.479m0-10.958a3 3 0 0 1 0 5.479 3 3 0 0 0 0 5.479m12 0a3 3 0 0 0 0-5.479 3 3 0 0 1 0-5.479m0 10.958a3 3 0 0 1 0-5.479 3 3 0 0 0 0-5.479M12 21a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 12 21m-3.741-.479a3 3 0 0 1-3 5.479m0 0a3 3 0 0 0 3-5.479m0 0A9.094 9.094 0 0 0 12 21" /></svg>
+                            <span class="font-medium">Comunidad</span>
+                        </a>
+                    </li>
+                </ul>
 
-        <!-- Área de Contenido Principal -->
-        <main class="flex-1 p-6 md:p-10 bg-white">
+                <!-- Menú Configuración -->
+                <ul>
+                    <li>
+                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-perfil">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                            <span class="font-medium">Perfil y Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- FIN: Navegación Lateral -->
 
-            <!-- ======================================= -->
-            <!-- PÁGINA 1: DASHBOARD (INICIO)            -->
-            <!-- ======================================= -->
-            <div id="page-dashboard" class="page-content hidden">
-                <h1 class="text-3xl font-bold mb-6">1.0 Inicio (Dashboard)</h1>
-                <p class="text-gray-600 mb-8">Bienvenida, Catalina. Aquí tienes tu resumen.</p>
-                
-                <!-- Resumen de Catalina -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="wireframe-box p-6">
-                        <span class="text-gray-600">Promedio Ponderado</span>
-                        <h2 class="text-5xl font-bold text-gray-900">5.78</h2>
-                    </div>
-                    <div class="wireframe-box p-6">
-                        <span class="text-gray-600">Créditos Aprobados</span>
-                        <h2 class="text-5xl font-bold text-gray-900">180 / 240</h2>
-                    </div>
-                    <div class="wireframe-box p-6">
-                        <span class="text-gray-600">Ramos Inscritos (Semestre)</span>
-                        <h2 class="text-5xl font-bold text-gray-900">5</h2>
-                    </div>
-                </div>
-
-                <!-- Widget de Horario -->
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold mb-4">1.2 Mi Horario Actual</h3>
-                    <div class="wireframe-placeholder h-64">
-                        [ Widget: Grilla de Horario Semanal ]
-                    </div>
-                </div>
-
-                <!-- Atajos -->
-                <div>
-                    <h3 class="text-2xl font-semibold mb-4">1.3 Atajos</h3>
-                    <div class="flex space-x-4">
-                        <button class="wireframe-button text-lg" onclick="showPage('planificar')">Ir a Planificar</button>
-                        <button class="wireframe-button text-lg" onclick="showModal('simulador')">Simulación Rápida</button>
-                    </div>
-                </div>
+        <!-- INICIO: Header (Visible en Móvil) -->
+        <header class="bg-blue-900 text-white p-4 flex justify-between items-center md:hidden sticky top-0 z-40 shadow-lg">
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.906 59.906 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.717 50.717 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443a55.378 55.378 0 0 1 5.25 2.882V15M12 21a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675a55.378 55.378 0 0 1-5.25-2.882V15" />
+                </svg>
+                <span class="text-xl font-bold">ClickMalla</span>
             </div>
+            <button id="menu-btn" class="p-2">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </header>
+        <!-- FIN: Header (Móvil) -->
 
-            <!-- ======================================= -->
-            <!-- PÁGINA 2: MI AVANCE                     -->
-            <!-- ======================================= -->
-            <div id="page-avance" class="page-content hidden">
-                <h1 class="text-3xl font-bold mb-6">2.0 Mi Avance</h1>
-                
-                <h3 class="text-2xl font-semibold mb-4">2.1 Historial de Notas</h3>
-                <div class="wireframe-box p-0">
-                    <!-- Placeholder de Tabla de Historial -->
-                    <table class="w-full text-left">
-                        <thead class="border-b-2 border-dashed border-gray-400">
-                            <tr>
-                                <th class="p-4">Código</th>
-                                <th class="p-4">Ramo</th>
-                                <th class="p-4">Semestre</th>
-                                <th class="p-4">Nota Final</th>
-                                <th class="p-4">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-dashed border-gray-300">
-                                <td class="p-4">IN1001</td>
-                                <td class="p-4">Programación</td>
-                                <td class="p-4">2023-1</td>
-                                <td class="p-4">6.5</td>
-                                <td class="p-4 text-green-700">Aprobado</td>
-                            </tr>
-                            <tr class="border-b border-dashed border-gray-300">
-                                <td class="p-4">IN1002</td>
-                                <td class="p-4">Cálculo I</td>
-                                <td class="p-4">2023-1</td>
-                                <td class="p-4">5.0</td>
-                                <td class="p-4 text-green-700">Aprobado</td>
-                            </tr>
-                            <tr class="border-b border-dashed border-gray-300">
-                                <td class="p-4">IN2001</td>
-                                <td class="p-4">Bases de Datos</td>
-                                <td class="p-4">2023-2</td>
-                                <td class="p-4">...</td>
-                                <td class="p-4 text-blue-700">Cursando</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 class="text-2xl font-semibold mt-8 mb-4">2.2 Malla Completa (Visualización)</h3>
-                <div class="wireframe-placeholder h-96">
-                    [ Gráfico de Malla Interactiva Completa (Solo Vista) ]
-                </div>
+        <!-- INICIO: Menú Móvil (Oculto por defecto) -->
+        <div id="mobile-menu" class="fixed inset-0 bg-blue-900 bg-opacity-95 z-50 text-white p-6 hidden md:hidden">
+            <div class="flex justify-between items-center mb-10">
+                <span class="text-2xl font-bold">Menú</span>
+                <button id="close-menu-btn" class="p-2">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
+            <nav class="flex flex-col h-full justify-between">
+                 <!-- Menú Principal -->
+                 <ul class="space-y-4">
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-inicio">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+                            <span class="text-lg font-medium">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-progreso">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
+                            <span class="text-lg font-medium">Mi Progreso</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-malla">
+                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
+                            <span class="text-lg font-medium">Malla Curricular</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-planificar">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+                            <span class="text-lg font-medium">Planificar Horario</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-comunidad">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 18 18.72m-12 0a9.094 9.094 0 0 1 3.741-.479 3 3 0 0 1-3-5.479m0 0a3 3 0 0 0 3 5.479M6 18.72A9.095 9.095 0 0 0 6 18.72m0-12.24a3 3 0 0 0 0 5.479 3 3 0 0 1 0 5.479m0-10.958a3 3 0 0 1 0 5.479 3 3 0 0 0 0 5.479m12 0a3 3 0 0 0 0-5.479 3 3 0 0 1 0-5.479m0 10.958a3 3 0 0 1 0-5.479 3 3 0 0 0 0-5.479M12 21a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 12 21m-3.741-.479a3 3 0 0 1-3 5.479m0 0a3 3 0 0 0 3-5.479m0 0A9.094 9.094 0 0 0 12 21" /></svg>
+                            <span class="text-lg font-medium">Comunidad</span>
+                        </a>
+                    </li>
+                </ul>
 
-            <!-- ======================================= -->
-            <!-- PÁGINA 3: PLANIFICAR                  -->
-            <!-- ======================================= -->
-            <div id="page-planificar" class="page-content">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-3xl font-bold">3.1 Planificador Semestral</h1>
-                    <div class="flex space-x-2">
-                        <button class="wireframe-button" onclick="showModal('simulador')">3.2 Simular Promedio</button>
-                        <button class="wireframe-button bg-blue-200 border-blue-500">Guardar Planificación</button>
-                    </div>
-                </div>
+                <!-- Menú Configuración -->
+                <ul class="pb-10">
+                    <li>
+                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-perfil">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                            <span class="text-lg font-medium">Perfil y Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- FIN: Menú Móvil -->
+
+        <!-- INICIO: Contenido Principal -->
+        <main class="md:ml-64 p-6 md:p-10 transition-all duration-300 ease-in-out">
+            
+            <!-- Página: Inicio (Dashboard) -->
+            <div id="page-inicio" class="content-page">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Panel de Inicio</h1>
+                <p class="text-lg text-gray-600 mb-8">¡Hola, Pedro! Aquí tienes un resumen de tu estado académico.</p>
                 
-                <p class="text-gray-600 mb-8">Arrastra ramos de la malla a tu horario para planificar el Semestre 2026-1.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Card: Próximas Evaluaciones -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Próximas Evaluaciones</h2>
+                        <ul class="space-y-3">
+                            <li class="flex items-center space-x-3">
+                                <span class="flex-shrink-0 w-3 h-3 bg-red-500 rounded-full"></span>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-800">Entrega 2 - Interacción Persona-Computador</p>
+                                    <p class="text-sm text-gray-500">Viernes, 7 de Noviembre</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="flex-shrink-0 w-3 h-3 bg-yellow-500 rounded-full"></span>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-800">Prueba 2 - Cálculo II</p>
+                                    <p class="text-sm text-gray-500">Lunes, 10 de Noviembre</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="flex-shrink-0 w-3 h-3 bg-blue-500 rounded-full"></span>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-800">Control 3 - Física I</p>
+                                    <p class="text-sm text-gray-500">Miércoles, 12 de Noviembre</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Columna de Malla -->
-                    <div class="w-full md:w-1/2">
-                        <h3 class="text-2xl font-semibold mb-4">Ramos Disponibles (Semestre 6)</h3>
-                        <div class="wireframe-box space-y-3 p-4">
-                            <div class="wireframe-button cursor-grab bg-white">IN3001 - Ing. de Software</div>
-                            <div class="wireframe-button cursor-grab bg-white">IN3002 - Redes</div>
-                            <div class="wireframe-button cursor-not-allowed bg-gray-300 text-gray-500 line-through">IN3003 - Sist. Operativos (Prerreq: IN2005)</div>
-                            <div class="wireframe-button cursor-grab bg-white">FG1001 - Formación General I</div>
+                    <!-- Card: Resumen de Progreso -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Resumen de Progreso</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-base font-medium text-blue-700">Créditos Aprobados</span>
+                                    <span class="text-sm font-medium text-blue-700">120 / 240</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Promedio Ponderado</p>
+                                <p class="text-3xl font-bold text-gray-800">5.21</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Ramos en curso</p>
+                                <p class="text-3xl font-bold text-gray-800">5</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Columna de Horario -->
-                    <div class="w-full md:w-1/2">
-                        <h3 class="text-2xl font-semibold mb-4">3.1.1 Vista de Horario</h3>
-                        <div class="wireframe-placeholder h-96">
-                            [ Grilla de Horario Semanal ]
-                            <div class="wireframe-box bg-blue-100 border-blue-400 p-2 m-4">
-                                IN3001 - Ing. de Software
-                                <br>
-                                (L-W 10:00-11:30)
+
+                    <!-- Card: Notificaciones -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Notificaciones</h2>
+                        <ul class="space-y-4">
+                            <li class="flex space-x-3">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" /></svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Nueva nota publicada en "Cálculo II".</p>
+                                    <p class="text-sm text-gray-500">hace 30 minutos</p>
+                                </div>
+                            </li>
+                            <li class="flex space-x-3">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c.243-1.47 1.28-2.738 2.58-3.412a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412M15.75 6.75a4.5 4.5 0 0 0-6.338 0m6.338 0c-1.3.673-2.338 1.94-2.58 3.412M3.75 16.125c1.3-.673 2.338-1.94 2.58-3.412a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412M12 16.125v4.5m-4.5-4.5v4.5m9 0v-4.5" /></svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Nuevo mensaje en el foro de "IPO".</p>
+                                    <p class="text-sm text-gray-500">hace 2 horas</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página: Mi Progreso -->
+            <div id="page-progreso" class="content-page hidden">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Mi Progreso Académico</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card: Avance de Créditos -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 md:col-span-2 lg:col-span-1">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Avance de Créditos</h2>
+                        <div class="flex items-center justify-center">
+                            <!-- Placeholder para un gráfico de dona -->
+                            <div class="relative w-40 h-40">
+                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                    <path d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none"
+                                      stroke="#e5e7eb"
+                                      stroke-width="3"/>
+                                    <path d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831"
+                                      fill="none"
+                                      stroke="#2563eb"
+                                      stroke-width="3"
+                                      stroke-dasharray="50, 100"
+                                      stroke-dashoffset="0"/>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-3xl font-bold text-gray-800">50%</span>
+                                    <span class="text-sm text-gray-500">120/240</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card: Promedio Ponderado -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Promedio Ponderado</h2>
+                        <p class="text-6xl font-bold text-blue-600">5.21</p>
+                    </div>
+
+                    <!-- Card: Progreso Mención -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Progreso Mención (IA)</h2>
+                        <p class="text-6xl font-bold text-green-600">40%</p>
+                        <p class="text-gray-500 mt-2">2 de 5 ramos completados</p>
+                    </div>
+                </div>
+
+                <!-- Card: Historial de Notas -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Historial de Notas</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ramo</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nota Final</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semestre</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Introducción a la Programación</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.0</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aprobado</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cálculo I</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.5</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aprobado</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Álgebra I</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.8</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Reprobado</span>
+                                    </td>
+                                </tr>
+                                <!-- Más filas... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Card: Simuladores -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Simuladores</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800 mb-2">Simular nota de aprobación</h3>
+                            <div class="space-y-3">
+                                <select class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Seleccionar ramo en curso...</option>
+                                    <option>Cálculo II</option>
+                                    <option>Interacción Persona-Computador</option>
+                                </select>
+                                <input type="number" placeholder="Nota 1 (ej: 4.0)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                                <input type="number" placeholder="Nota 2 (ej: 5.5)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                                <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Calcular nota necesaria</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800 mb-2">Simular promedio final de carrera</h3>
+                            <div class="space-y-3">
+                                <input type="number" placeholder="Ramos restantes (ej: 20)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                                <input type="number" placeholder="Promedio esperado (ej: 5.5)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                                <button class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Simular Promedio Final</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Página: Malla Curricular -->
+            <div id="page-malla" class="content-page hidden">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Malla Curricular</h1>
+                
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Ingeniería Informática</h2>
+                    <!-- Representación de la Malla -->
+                    <div class="overflow-x-auto no-scrollbar">
+                        <div class="flex space-x-6">
+                            <!-- Semestre 1 -->
+                            <div class="flex-shrink-0 w-64">
+                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre I</h3>
+                                <div class="space-y-3">
+                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-blue-800">Cálculo I</p>
+                                        <p class="text-sm text-blue-600">MAT110 - 5 Créditos</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-blue-800">Álgebra I</p>
+                                        <p class="text-sm text-blue-600">MAT111 - 5 Créditos</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-green-800">Intro. a la Programación</p>
+                                        <p class="text-sm text-green-600">INF120 - 5 Créditos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Semestre 2 -->
+                            <div class="flex-shrink-0 w-64">
+                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre II</h3>
+                                <div class="space-y-3">
+                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-blue-800">Cálculo II</p>
+                                        <p class="text-sm text-blue-600">MAT112 - 5 Créditos</p>
+                                        <p class="text-xs text-blue-500 mt-1">Prerreq: Cálculo I</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-blue-800">Álgebra II</p>
+                                        <p class="text-sm text-blue-600">MAT113 - 5 Créditos</p>
+                                        <p class="text-xs text-blue-500 mt-1">Prerreq: Álgebra I</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-green-800">Programación Avanzada</p>
+                                        <p class="text-sm text-green-600">INF121 - 5 Créditos</p>
+                                        <p class="text-xs text-green-500 mt-1">Prerreq: Intro. a la Prog.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Semestre 3 -->
+                            <div class="flex-shrink-0 w-64">
+                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre III</h3>
+                                <div class="space-y-3">
+                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-blue-800">Ecuaciones Diferenciales</p>
+                                        <p class="text-sm text-blue-600">MAT114 - 5 Créditos</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-yellow-800">Física I</p>
+                                        <p class="text-sm text-yellow-600">FIS130 - 5 Créditos</p>
+                                    </div>
+                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
+                                        <p class="font-semibold text-green-800">Estructura de Datos</p>
+                                        <p class="text-sm text-green-600">INF130 - 5 Créditos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Más semestres... -->
+                        </div>
+                    </div>
+
+                    <!-- Ficha de Ramo (Mockup) -->
+                    <div class="mt-8 border-t pt-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Detalle del Ramo Seleccionado</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-xl font-bold text-gray-800">INF130 - Estructura de Datos</h4>
+                            <p class="text-gray-600 mb-3">Prerrequisitos: Programación Avanzada (INF121)</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div><span class="font-semibold">Profesores:</span> Luis Casillas</div>
+                                <div><span class="font-semibold">Cupos:</span> 45/50</div>
+                                <div><span class="font-semibold">Sala:</span> IBC-10</div>
+                                <div><span class="font-semibold">Créditos:</span> 5</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ======================================= -->
-            <!-- PÁGINA 4: COMUNIDAD                   -->
-            <!-- ======================================= -->
-            <div id="page-comunidad" class="page-content hidden">
-                <h1 class="text-3xl font-bold mb-6">4.0 Comunidad</h1>
-                <div class="wireframe-box text-left">
-                    <h3 class="text-2xl font-semibold mb-4">4.1 Apuntes y Consejos (IN3001)</h3>
-                    <p class="text-gray-600 mb-4">Buscando apuntes para: [Input de Búsqueda]</p>
-                    <div class="wireframe-box bg-white p-4 mb-4">
-                        <h4 class="font-bold">Resumen Prueba 1 (por ivan.g)</h4>
-                        <p class="text-sm text-gray-600">"Ojo con la materia de diagramas, el profe preguntó..."</p>
+            <!-- Página: Planificar Horario -->
+            <div id="page-planificar" class="content-page hidden">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Planificar Horario</h1>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Columna: Ramos Disponibles -->
+                    <div class="lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Ramos que puedes tomar</h2>
+                        <p class="text-sm text-gray-500 mb-4">Arrastra los ramos a tu horario para planificar tu semestre.</p>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-move">
+                                <p class="font-semibold text-green-800">Interacción Persona-Computador</p>
+                                <p class="text-sm text-green-600">INF238 - L/W/V 3-4</p>
+                            </div>
+                            <div class="p-3 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-move">
+                                <p class="font-semibold text-blue-800">Cálculo II</p>
+                                <p class="text-sm text-blue-600">MAT112 - L/W/V 1-2</p>
+                            </div>
+                            <div class="p-3 bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm cursor-move">
+                                <p class="font-semibold text-yellow-800">Física I</p>
+                                <p class="text-sm text-yellow-600">FIS130 - M/J 1-2</p>
+                            </div>
+                        </div>
+                         <button class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                            Sincronizar con Google Calendar
+                        </button>
                     </div>
-                    <div class="wireframe-box bg-white p-4">
-                        <h4 class="font-bold">Apuntes Clases (por catalina.p)</h4>
-                        <p class="text-sm text-gray-600">"Aquí está el PDF completo de la unidad 1..."</p>
+
+                    <!-- Columna: Horario Semestral -->
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Mi Horario Semestral</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border-collapse border border-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Hora</th>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Lunes</th>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Martes</th>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Miércoles</th>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Jueves</th>
+                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Viernes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">08:00-09:30</td>
+                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
+                                        <td class_name="border border-gray-200 p-2 bg-yellow-50 text-yellow-800">Física I</td>
+                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
+                                        <td class_name="border border-gray-200 p-2 bg-yellow-50 text-yellow-800">Física I</td>
+                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">09:40-11:10</td>
+                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
+                                        <td class_name="border border-gray-200 p-2"></td>
+                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
+                                        <td class_name="border border-gray-200 p-2"></td>
+                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">11:20-12:50</td>
+                                        <td class="border border-gray-200 p-2"></td>
+                                        <td class="border border-gray-200 p-2"></td>
+                                        <td class="border border-gray-200 p-2"></td>
+                                        <td class="border border-gray-200 p-2"></td>
+                                        <td class="border border-gray-200 p-2"></td>
+                                    </tr>
+                                    <!-- Más filas de horario -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ======================================= -->
-            <!-- PÁGINA 5: PERFIL                      -->
-            <!-- ======================================= -->
-            <div id="page-perfil" class="page-content hidden">
-                <h1 class="text-3xl font-bold mb-6">5.0 Mi Perfil</h1>
-                <div class="wireframe-box text-left max-w-lg">
-                    <h3 class="text-2xl font-semibold mb-4">5.1 Notificaciones</h3>
-                    <div class="flex items-center justify-between mb-2">
-                        <label>Notificarme sobre fechas de pruebas</label>
-                        [Checkbox Toggle]
+            <!-- Página: Comunidad -->
+            <div id="page-comunidad" class="content-page hidden">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Comunidad</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card: Foros de Discusión -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Foros de Discusión</h2>
+                        <ul class="divide-y divide-gray-200">
+                            <li class="py-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-gray-800">Foro: Cálculo II</p>
+                                    <p class="text-sm text-gray-500">Último mensaje: hace 5 min</p>
+                                </div>
+                                <span class="text-sm font-semibold text-blue-600">3 nuevos</span>
+                            </li>
+                            <li class="py-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-gray-800">Foro: Interacción Persona-Computador</p>
+                                    <p class="text-sm text-gray-500">Último mensaje: hace 2 horas</p>
+                                </div>
+                                <span class="text-sm font-semibold text-blue-600">1 nuevo</span>
+                            </li>
+                            <li class="py-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-gray-800">Foro: Física I</p>
+                                    <p class="text-sm text-gray-500">Último mensaje: ayer</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="flex items-center justify-between mb-6">
-                        <label>Notificarme sobre cupos liberados</label>
-                        [Checkbox Toggle]
+
+                    <!-- Card: Apuntes y Consejos -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Apuntes y Consejos</h2>
+                        <input type="text" placeholder="Buscar apuntes por ramo..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4">
+                        <ul class="space-y-2">
+                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Resumen Prueba 1 - Cálculo II</a></li>
+                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Apuntes Clases de Física I (Prof. Casillas)</a></li>
+                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Tips para la Entrega 2 de IPO</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página: Perfil y Configuración -->
+            <div id="page-perfil" class="content-page hidden">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Perfil y Configuración</h1>
+                
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+                    <!-- Mi Perfil -->
+                    <div class="pb-6 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Mi Perfil</h2>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img class="w-16 h-16 rounded-full" src="https://placehold.co/100x100/E2E8F0/718096?text=PJ" alt="Foto de Perfil">
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800">Pedro Jeria Donaire</h3>
+                                <p class="text-sm text-gray-500">pedro.jeria.d@alumnos.uv.cl</p>
+                            </div>
+                        </div>
+                        <button class="text-sm text-blue-600 hover:underline">Cambiar foto de perfil</button>
+                    </div>
+
+                    <!-- Configuración de la Cuenta -->
+                    <div class="py-6 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Configuración de la Cuenta</h2>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cambiar Contraseña</label>
+                                <input type="password" placeholder="Nueva contraseña" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <button class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Guardar Cambios</button>
+                        </div>
+                    </div>
+
+                    <!-- Notificaciones -->
+                    <div class="py-6 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Notificaciones</h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-gray-700">Nuevas notas publicadas</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-gray-700">Nuevos mensajes en foros</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-gray-700">Recordatorios de evaluaciones</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     
-                    <h3 class="text-2xl font-semibold mb-4">5.2 Sincronizar Calendario</h3>
-                    <button class="wireframe-button">Conectar con Google Calendar</button>
+                    <!-- Ayuda y Cierre de Sesión -->
+                    <div class="pt-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
+                            <a href="#" class="font-medium text-blue-600 hover:underline">Ayuda y Soporte Técnico</a>
+                            <button class="w-full md:w-auto bg-red-100 text-red-700 py-2 px-4 rounded-md hover:bg-red-200 transition-colors font-medium">
+                                Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </main>
+        <!-- FIN: Contenido Principal -->
     </div>
-
-    <!-- ======================================= -->
-    <!-- MODAL: SIMULADOR DE NOTAS               -->
-    <!-- ======================================= -->
-    <div id="modal-simulador" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="wireframe-box bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-left">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">3.2 Simulador de Promedio</h2>
-                <button class="text-2xl" onclick="hideModal('simulador')">&times;</button>
-            </div>
-            <p class="text-gray-600 mb-6">Ingresa las notas que *esperas* sacar en los ramos que estás cursando para ver tu nuevo promedio ponderado.</p>
-            
-            <!-- Formulario de simulación -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <label>IN2001 - Bases de Datos</label>
-                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="6.0">
-                </div>
-                <div class="flex items-center justify-between">
-                    <label>IN2005 - Estructura de Datos</label>
-                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="5.5">
-                </div>
-                <div class="flex items-center justify-between">
-                    <label>FG2001 - Formación General</label>
-                    <input type="text" class="border-2 border-dashed border-gray-400 w-20 p-2 text-center" value="5.0">
-                </div>
-            </div>
-
-            <!-- Resultado -->
-            <div class="mt-8 pt-6 border-t-2 border-dashed border-gray-400">
-                <span class="text-gray-600">Tu nuevo promedio ponderado sería:</span>
-                <h3 class="text-4xl font-bold text-blue-700">5.85</h3>
-            </div>
-        </div>
-    </div>
-
 
     <script>
-        // Lógica simple de JS para mostrar/ocultar páginas y modales
-        let currentPage = 'planificar';
-
-        function showPage(pageId) {
-            // Ocultar todas las páginas
-            document.querySelectorAll('.page-content').forEach(page => {
-                page.classList.add('hidden');
-            });
-            // Mostrar la página solicitada
-            document.getElementById('page-' + pageId).classList.remove('hidden');
-            
-            // Actualizar estado activo en la nav
-            document.querySelectorAll('.wireframe-nav a').forEach(a => {
-                a.classList.remove('active');
-            });
-            document.querySelector(`.wireframe-nav a[href="#${pageId}"]`).classList.add('active');
-            
-            currentPage = pageId;
-        }
-
-        function showModal(modalId) {
-            document.getElementById('modal-' + modalId).classList.remove('hidden');
-        }
-
-        function hideModal(modalId) {
-            document.getElementById('modal-' + modalId).classList.add('hidden');
-        }
-
-        // Mostrar la página de planificación por defecto
         document.addEventListener('DOMContentLoaded', () => {
-            showPage('planificar');
+            const menuBtn = document.getElementById('menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            const contentPages = document.querySelectorAll('.content-page');
+
+            // Función para mostrar la página seleccionada y actualizar el enlace activo
+            function showPage(pageId) {
+                // Ocultar todas las páginas
+                contentPages.forEach(page => {
+                    page.classList.add('hidden');
+                });
+
+                // Mostrar la página seleccionada
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                }
+
+                // Actualizar el estado activo de los enlaces de navegación
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-blue-800', 'font-semibold', 'text-white');
+                    link.classList.add('text-blue-100');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('bg-blue-800', 'font-semibold', 'text-white');
+                        link.classList.remove('text-blue-100');
+                    }
+                });
+            }
+
+            // Función para abrir/cerrar el menú móvil
+            function toggleMenu() {
+                mobileMenu.classList.toggle('hidden');
+            }
+
+            // Event Listeners para los botones del menú móvil
+            menuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+
+            // Event Listeners para los enlaces de navegación
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    showPage(pageId);
+                });
+            });
+
+            // Event Listeners para los enlaces del menú móvil (cierran el menú al hacer clic)
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    showPage(pageId);
+                    toggleMenu(); // Cierra el menú después de la selección
+                });
+            });
+
+
+            // Mostrar la página de inicio por defecto
+            showPage('page-inicio');
         });
     </script>
 </body>

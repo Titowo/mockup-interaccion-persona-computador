@@ -3,731 +3,984 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClickMalla - Prototipo</title>
-    <!-- Cargar Tailwind CSS -->
+    <title>ClickMalla - Prototipo Avanzado</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Cargar Fuente Inter -->
+    
+    <!-- Fuentes Google (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        /* Aplicar fuente Inter a todo el documento */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Ocultar scrollbars en webkit (Chrome, Safari) */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        /* Ocultar scrollbars en Firefox */
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE y Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        /* Estilo para el ramo en la malla (para simular interacción) */
-        .ramo-malla {
-            transition: all 0.2s ease-in-out;
-        }
-        .ramo-malla:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-active { background-color: #4f46e5; color: white; border-left: 4px solid #a5b4fc; }
+        
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 text-slate-800 h-screen flex overflow-hidden">
 
-    <div>
-        <!-- INICIO: Navegación Lateral (Visible en Escritorio) -->
-        <div class="fixed inset-y-0 left-0 z-30 w-64 transform bg-blue-900 text-white p-6 transition-transform duration-300 ease-in-out hidden md:block">
-            <div class="flex items-center space-x-3 mb-10">
-                <!-- Icono de App (Placeholder) -->
-                <svg class="w-10 h-10 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.906 59.906 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.717 50.717 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443a55.378 55.378 0 0 1 5.25 2.882V15M12 21a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675a55.378 55.378 0 0 1-5.25-2.882V15" />
-                </svg>
-                <span class="text-2xl font-bold">ClickMalla</span>
+    <!-- MODAL DE INICIO (Reset/Bienvenida) -->
+    <div id="modal-bienvenida" class="fixed inset-0 bg-slate-900/95 z-50 flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-indigo-600"></div>
+            <div class="bg-indigo-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="user-plus" class="w-8 h-8 text-indigo-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Sesión de Testeo</h2>
+            <p class="text-slate-500 mb-6 text-sm">Ingresa el nombre del participante para iniciar una sesión limpia.</p>
+            
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Nombre Estudiante</label>
+                    <input type="text" id="input-nombre-usuario" placeholder="Ej: Usuario de Prueba 1" class="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Carrera</label>
+                    <input type="text" value="Ingeniería Civil Informática" disabled class="w-full p-3 bg-gray-100 border border-gray-200 rounded-lg mt-1 text-gray-500 cursor-not-allowed">
+                </div>
             </div>
             
-            <nav class="flex flex-col h-full justify-between">
-                <!-- Menú Principal -->
-                <ul class="space-y-3">
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-inicio">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-                            <span class="font-medium">Inicio</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-progreso">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
-                            <span class="font-medium">Mi Progreso</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-malla">
-                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
-                            <span class="font-medium">Malla Curricular</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-planificar">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
-                            <span class="font-medium">Planificar Horario</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-comunidad">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 18 18.72m-12 0a9.094 9.094 0 0 1 3.741-.479 3 3 0 0 1-3-5.479m0 0a3 3 0 0 0 3 5.479M6 18.72A9.095 9.095 0 0 0 6 18.72m0-12.24a3 3 0 0 0 0 5.479 3 3 0 0 1 0 5.479m0-10.958a3 3 0 0 1 0 5.479 3 3 0 0 0 0 5.479m12 0a3 3 0 0 0 0-5.479 3 3 0 0 1 0-5.479m0 10.958a3 3 0 0 1 0-5.479 3 3 0 0 0 0-5.479M12 21a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 12 21m-3.741-.479a3 3 0 0 1-3 5.479m0 0a3 3 0 0 0 3-5.479m0 0A9.094 9.094 0 0 0 12 21" /></svg>
-                            <span class="font-medium">Comunidad</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Menú Configuración -->
-                <ul>
-                    <li>
-                        <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-perfil">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
-                            <span class="font-medium">Perfil y Configuración</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <!-- FIN: Navegación Lateral -->
-
-        <!-- INICIO: Header (Visible en Móvil) -->
-        <header class="bg-blue-900 text-white p-4 flex justify-between items-center md:hidden sticky top-0 z-40 shadow-lg">
-            <div class="flex items-center space-x-2">
-                <svg class="w-8 h-8 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.906 59.906 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.717 50.717 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443a55.378 55.378 0 0 1 5.25 2.882V15M12 21a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675a55.378 55.378 0 0 1-5.25-2.882V15" />
-                </svg>
-                <span class="text-xl font-bold">ClickMalla</span>
-            </div>
-            <button id="menu-btn" class="p-2">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
+            <button onclick="iniciarSesion()" class="w-full mt-8 bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg flex items-center justify-center gap-2">
+                <span>Iniciar Simulación</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
-        </header>
-        <!-- FIN: Header (Móvil) -->
+        </div>
+    </div>
 
-        <!-- INICIO: Menú Móvil (Oculto por defecto) -->
-        <div id="mobile-menu" class="fixed inset-0 bg-blue-900 bg-opacity-95 z-50 text-white p-6 hidden md:hidden">
-            <div class="flex justify-between items-center mb-10">
-                <span class="text-2xl font-bold">Menú</span>
-                <button id="close-menu-btn" class="p-2">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
+    <!-- MODAL: NUEVO RAMO -->
+    <div id="modal-nuevo-ramo" class="fixed inset-0 bg-slate-900/95 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full relative">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-slate-900">Agregar Nuevo Ramo</h2>
+                <button onclick="cerrarModalNuevoRamo()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <nav class="flex flex-col h-full justify-between">
-                 <!-- Menú Principal -->
-                 <ul class="space-y-4">
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-inicio">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-                            <span class="text-lg font-medium">Inicio</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-progreso">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
-                            <span class="text-lg font-medium">Mi Progreso</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-malla">
-                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
-                            <span class="text-lg font-medium">Malla Curricular</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-planificar">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
-                            <span class="text-lg font-medium">Planificar Horario</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-comunidad">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 18 18.72m-12 0a9.094 9.094 0 0 1 3.741-.479 3 3 0 0 1-3-5.479m0 0a3 3 0 0 0 3 5.479M6 18.72A9.095 9.095 0 0 0 6 18.72m0-12.24a3 3 0 0 0 0 5.479 3 3 0 0 1 0 5.479m0-10.958a3 3 0 0 1 0 5.479 3 3 0 0 0 0 5.479m12 0a3 3 0 0 0 0-5.479 3 3 0 0 1 0-5.479m0 10.958a3 3 0 0 1 0-5.479 3 3 0 0 0 0-5.479M12 21a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-3-5.479m0 0a3 3 0 0 1 3 5.479m0 0A9.095 9.095 0 0 1 12 21m-3.741-.479a3 3 0 0 1-3 5.479m0 0a3 3 0 0 0 3-5.479m0 0A9.094 9.094 0 0 0 12 21" /></svg>
-                            <span class="text-lg font-medium">Comunidad</span>
-                        </a>
-                    </li>
-                </ul>
+            
+            <form id="form-nuevo-ramo" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Código del Ramo *</label>
+                    <input type="text" id="nuevo-ramo-id" placeholder="Ej: MAT221" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none uppercase" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Nombre del Ramo *</label>
+                    <input type="text" id="nuevo-ramo-nombre" placeholder="Ej: Cálculo III" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Semestre *</label>
+                        <input type="number" id="nuevo-ramo-sem" min="1" max="12" placeholder="1-12" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Créditos *</label>
+                        <input type="number" id="nuevo-ramo-cred" min="1" max="20" placeholder="1-20" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                    <strong>Nota:</strong> Los horarios y prerrequisitos se pueden agregar posteriormente desde la vista de la malla.
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModalNuevoRamo()" class="flex-1 bg-gray-200 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="button" onclick="guardarNuevoRamo()" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                        Crear Ramo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-                <!-- Menú Configuración -->
-                <ul class="pb-10">
-                    <li>
-                        <a href="#" class="nav-link mobile-link flex items-center space-x-3 p-3 rounded-lg text-blue-100 hover:bg-blue-800 transition-colors duration-200" data-page="page-perfil">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
-                            <span class="text-lg font-medium">Perfil y Configuración</span>
-                        </a>
-                    </li>
-                </ul>
+    <!-- MENÚ LATERAL -->
+    <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-slate-300 transition-all z-20 shadow-xl">
+        <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-indigo-600 p-2 rounded-lg">
+                <i data-lucide="graduation-cap" class="text-white w-6 h-6"></i>
+            </div>
+            <span class="text-xl font-bold text-white tracking-tight">ClickMalla</span>
+        </div>
+        
+        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <button onclick="nav('inicio')" id="btn-inicio" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-all text-sm font-medium">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Inicio
+            </button>
+            <button onclick="nav('progreso')" id="btn-progreso" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-all text-sm font-medium">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Mi Progreso
+            </button>
+            <button onclick="nav('malla')" id="btn-malla" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-all text-sm font-medium">
+                <i data-lucide="git-branch" class="w-5 h-5"></i> Malla Curricular
+            </button>
+            <button onclick="nav('planificar')" id="btn-planificar" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-all text-sm font-medium">
+                <i data-lucide="calendar-clock" class="w-5 h-5"></i> Planificar Horario
+            </button>
+            <button onclick="nav('comunidad')" id="btn-comunidad" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-all text-sm font-medium">
+                <i data-lucide="users" class="w-5 h-5"></i> Comunidad
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="resetApp()" class="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 py-2 rounded-lg transition-colors text-xs font-bold uppercase tracking-wider">
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reiniciar Datos
+            </button>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="flex-1 flex flex-col relative overflow-hidden">
+        
+        <!-- Header Móvil -->
+        <header class="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center shadow-md z-30">
+            <div class="flex items-center gap-2">
+                <i data-lucide="graduation-cap" class="text-indigo-400 w-6 h-6"></i>
+                <span class="font-bold text-lg">ClickMalla</span>
+            </div>
+            <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-800 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="fixed inset-0 bg-slate-900/95 z-50 hidden transition-opacity fade-in flex flex-col p-6">
+            <div class="flex justify-between items-center mb-8">
+                <span class="text-2xl font-bold text-white">Menú</span>
+                <button onclick="toggleMenu()" class="text-white p-2 bg-slate-800 rounded-full"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <nav class="space-y-6 text-lg text-center">
+                <a href="#" onclick="nav('inicio'); toggleMenu()" class="block text-slate-300 hover:text-white">Inicio</a>
+                <a href="#" onclick="nav('progreso'); toggleMenu()" class="block text-slate-300 hover:text-white">Mi Progreso</a>
+                <a href="#" onclick="nav('malla'); toggleMenu()" class="block text-slate-300 hover:text-white">Malla</a>
+                <a href="#" onclick="nav('planificar'); toggleMenu()" class="block text-slate-300 hover:text-white">Planificar</a>
+                <a href="#" onclick="nav('comunidad'); toggleMenu()" class="block text-slate-300 hover:text-white">Comunidad</a>
             </nav>
         </div>
-        <!-- FIN: Menú Móvil -->
 
-        <!-- INICIO: Contenido Principal -->
-        <main class="md:ml-64 p-6 md:p-10 transition-all duration-300 ease-in-out">
+        <!-- VIEWS -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth bg-gray-50">
             
-            <!-- Página: Inicio (Dashboard) -->
-            <div id="page-inicio" class="content-page">
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">Panel de Inicio</h1>
-                <p class="text-lg text-gray-600 mb-8">¡Hola, Pedro! Aquí tienes un resumen de tu estado académico.</p>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Card: Próximas Evaluaciones -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Próximas Evaluaciones</h2>
-                        <ul class="space-y-3">
-                            <li class="flex items-center space-x-3">
-                                <span class="flex-shrink-0 w-3 h-3 bg-red-500 rounded-full"></span>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Entrega 2 - Interacción Persona-Computador</p>
-                                    <p class="text-sm text-gray-500">Viernes, 7 de Noviembre</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center space-x-3">
-                                <span class="flex-shrink-0 w-3 h-3 bg-yellow-500 rounded-full"></span>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Prueba 2 - Cálculo II</p>
-                                    <p class="text-sm text-gray-500">Lunes, 10 de Noviembre</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center space-x-3">
-                                <span class="flex-shrink-0 w-3 h-3 bg-blue-500 rounded-full"></span>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Control 3 - Física I</p>
-                                    <p class="text-sm text-gray-500">Miércoles, 12 de Noviembre</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+            <!-- VISTA 1: INICIO -->
+            <section id="view-inicio" class="view-section space-y-6 fade-in">
+                <header>
+                    <h1 class="text-2xl font-bold text-slate-900">Hola, <span class="user-name-display">Estudiante</span> 👋</h1>
+                    <p class="text-slate-500">Este es el estado actual de tu avance curricular.</p>
+                </header>
 
-                    <!-- Card: Resumen de Progreso -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Resumen de Progreso</h2>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-base font-medium text-blue-700">Créditos Aprobados</span>
-                                    <span class="text-sm font-medium text-blue-700">120 / 240</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%"></div>
-                                </div>
+                <!-- Estado Vacío (Inicial) -->
+                <div id="dashboard-empty" class="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center">
+                    <div class="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
+                        <i data-lucide="layout-template" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800">Tu Dashboard está vacío</h3>
+                    <p class="text-slate-500 text-sm mb-6 max-w-md mx-auto">Para comenzar, ve a la Malla Curricular y marca los ramos que ya has aprobado o que estás cursando.</p>
+                    <button onclick="nav('malla')" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-colors">
+                        Ir a la Malla
+                    </button>
+                </div>
+
+                <!-- Dashboard Con Datos (Oculto al inicio) -->
+                <div id="dashboard-stats" class="hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Promedio</p>
+                            <h3 class="text-4xl font-bold text-indigo-600 mt-1" id="val-promedio">0.0</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avance Créditos</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                                <span id="val-creditos">0</span><span class="text-lg text-slate-400 font-normal">/<span id="val-creditos-total">30</span></span>
+                            </h3>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+                                <div id="bar-creditos" class="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-600">Promedio Ponderado</p>
-                                <p class="text-3xl font-bold text-gray-800">5.21</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-600">Ramos en curso</p>
-                                <p class="text-3xl font-bold text-gray-800">5</p>
+                            <p class="text-xs text-slate-500 mt-1"><span id="val-porcentaje">0%</span> completado</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Ramos Aprobados</p>
+                            <h3 class="text-4xl font-bold text-green-600 mt-1" id="val-aprobados">0</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Estadísticas</p>
+                            <div class="mt-2 space-y-1 text-sm">
+                                <p class="text-blue-600">Cursando: <span id="val-cursando" class="font-bold">0</span></p>
+                                <p class="text-red-600">Reprobados: <span id="val-reprobados" class="font-bold">0</span></p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Card: Notificaciones -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Notificaciones</h2>
-                        <ul class="space-y-4">
-                            <li class="flex space-x-3">
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" /></svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Nueva nota publicada en "Cálculo II".</p>
-                                    <p class="text-sm text-gray-500">hace 30 minutos</p>
-                                </div>
-                            </li>
-                            <li class="flex space-x-3">
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c.243-1.47 1.28-2.738 2.58-3.412a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412M15.75 6.75a4.5 4.5 0 0 0-6.338 0m6.338 0c-1.3.673-2.338 1.94-2.58 3.412M3.75 16.125c1.3-.673 2.338-1.94 2.58-3.412a4.5 4.5 0 0 1 6.338 0c1.3.673 2.338 1.94 2.58 3.412M12 16.125v4.5m-4.5-4.5v4.5m9 0v-4.5" /></svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Nuevo mensaje en el foro de "IPO".</p>
-                                    <p class="text-sm text-gray-500">hace 2 horas</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Página: Mi Progreso -->
-            <div id="page-progreso" class="content-page hidden">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Mi Progreso Académico</h1>
+            <!-- VISTA 2: MI PROGRESO -->
+            <section id="view-progreso" class="view-section hidden space-y-6 fade-in">
+                <h1 class="text-2xl font-bold text-slate-900">Mi Progreso</h1>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Card: Avance de Créditos -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 md:col-span-2 lg:col-span-1">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Avance de Créditos</h2>
-                        <div class="flex items-center justify-center">
-                            <!-- Placeholder para un gráfico de dona -->
-                            <div class="relative w-40 h-40">
-                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                    <path d="M18 2.0845
-                                      a 15.9155 15.9155 0 0 1 0 31.831
-                                      a 15.9155 15.9155 0 0 1 0 -31.831"
-                                      fill="none"
-                                      stroke="#e5e7eb"
-                                      stroke-width="3"/>
-                                    <path d="M18 2.0845
-                                      a 15.9155 15.9155 0 0 1 0 31.831"
-                                      fill="none"
-                                      stroke="#2563eb"
-                                      stroke-width="3"
-                                      stroke-dasharray="50, 100"
-                                      stroke-dashoffset="0"/>
-                                </svg>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span class="text-3xl font-bold text-gray-800">50%</span>
-                                    <span class="text-sm text-gray-500">120/240</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2"><i data-lucide="history" class="w-4 h-4"></i> Historial Académico</h3>
+                        <button onclick="nav('malla')" class="text-xs text-indigo-600 font-bold hover:underline">+ Agregar Ramos</button>
                     </div>
-                    
-                    <!-- Card: Promedio Ponderado -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Promedio Ponderado</h2>
-                        <p class="text-6xl font-bold text-blue-600">5.21</p>
-                    </div>
-
-                    <!-- Card: Progreso Mención -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">Progreso Mención (IA)</h2>
-                        <p class="text-6xl font-bold text-green-600">40%</p>
-                        <p class="text-gray-500 mt-2">2 de 5 ramos completados</p>
-                    </div>
-                </div>
-
-                <!-- Card: Historial de Notas -->
-                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Historial de Notas</h2>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-500 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ramo</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nota Final</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semestre</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                    <th class="px-6 py-3">Ramo</th>
+                                    <th class="px-6 py-3">Estado</th>
+                                    <th class="px-6 py-3 text-right">Nota</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Introducción a la Programación</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.0</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aprobado</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cálculo I</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.5</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aprobado</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Álgebra I</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.8</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Reprobado</span>
-                                    </td>
-                                </tr>
-                                <!-- Más filas... -->
+                            <tbody id="tabla-historial" class="divide-y divide-gray-100">
+                                <!-- JS -->
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <!-- Card: Simuladores -->
-                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Simuladores</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-2">Simular nota de aprobación</h3>
-                            <div class="space-y-3">
-                                <select class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    <option>Seleccionar ramo en curso...</option>
-                                    <option>Cálculo II</option>
-                                    <option>Interacción Persona-Computador</option>
-                                </select>
-                                <input type="number" placeholder="Nota 1 (ej: 4.0)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                                <input type="number" placeholder="Nota 2 (ej: 5.5)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                                <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Calcular nota necesaria</button>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-2">Simular promedio final de carrera</h3>
-                            <div class="space-y-3">
-                                <input type="number" placeholder="Ramos restantes (ej: 20)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                                <input type="number" placeholder="Promedio esperado (ej: 5.5)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                                <button class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Simular Promedio Final</button>
-                            </div>
+                        <div id="empty-historial" class="p-8 text-center text-slate-400 italic text-sm">
+                            No hay ramos registrados en el historial.
                         </div>
                     </div>
                 </div>
+            </section>
 
-            </div>
-            
-            <!-- Página: Malla Curricular -->
-            <div id="page-malla" class="content-page hidden">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Malla Curricular</h1>
+            <!-- VISTA 3: MALLA INTERACTIVA -->
+            <section id="view-malla" class="view-section hidden h-full flex flex-col fade-in">
+                <div class="flex justify-between items-end mb-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900">Malla Curricular</h1>
+                        <p class="text-sm text-slate-500">Toca un ramo para editar su estado y nota.</p>
+                    </div>
+                    <div class="flex gap-2 text-xs">
+                        <span class="px-2 py-1 rounded bg-green-100 text-green-800 border border-green-200">Aprobado</span>
+                        <span class="px-2 py-1 rounded bg-blue-100 text-blue-800 border border-blue-200">Cursando</span>
+                        <span class="px-2 py-1 rounded bg-white border border-gray-200 text-gray-500">Pendiente</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-6 h-full">
+                    <!-- Malla Visual -->
+                    <div class="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-x-auto relative">
+                        <div id="malla-grid" class="flex gap-8 min-w-max pb-4">
+                            <!-- Se genera con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Editor Lateral -->
+                    <div class="lg:w-80 shrink-0">
+                        <div id="editor-panel" class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-0 h-fit">
+                            <div class="text-center text-slate-400 py-10">
+                                <i data-lucide="mouse-pointer-click" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                                <p>Selecciona un ramo de la malla</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA 4: PLANIFICADOR -->
+            <section id="view-planificar" class="view-section hidden space-y-6 fade-in">
+                <h1 class="text-2xl font-bold text-slate-900">Planificar Horario</h1>
                 
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Ingeniería Informática</h2>
-                    <!-- Representación de la Malla -->
-                    <div class="overflow-x-auto no-scrollbar">
-                        <div class="flex space-x-6">
-                            <!-- Semestre 1 -->
-                            <div class="flex-shrink-0 w-64">
-                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre I</h3>
-                                <div class="space-y-3">
-                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-blue-800">Cálculo I</p>
-                                        <p class="text-sm text-blue-600">MAT110 - 5 Créditos</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-blue-800">Álgebra I</p>
-                                        <p class="text-sm text-blue-600">MAT111 - 5 Créditos</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-green-800">Intro. a la Programación</p>
-                                        <p class="text-sm text-green-600">INF120 - 5 Créditos</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Semestre 2 -->
-                            <div class="flex-shrink-0 w-64">
-                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre II</h3>
-                                <div class="space-y-3">
-                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-blue-800">Cálculo II</p>
-                                        <p class="text-sm text-blue-600">MAT112 - 5 Créditos</p>
-                                        <p class="text-xs text-blue-500 mt-1">Prerreq: Cálculo I</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-blue-800">Álgebra II</p>
-                                        <p class="text-sm text-blue-600">MAT113 - 5 Créditos</p>
-                                        <p class="text-xs text-blue-500 mt-1">Prerreq: Álgebra I</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-green-800">Programación Avanzada</p>
-                                        <p class="text-sm text-green-600">INF121 - 5 Créditos</p>
-                                        <p class="text-xs text-green-500 mt-1">Prerreq: Intro. a la Prog.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Semestre 3 -->
-                            <div class="flex-shrink-0 w-64">
-                                <h3 class="font-semibold text-gray-600 uppercase mb-3">Semestre III</h3>
-                                <div class="space-y-3">
-                                    <div class="ramo-malla p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-blue-800">Ecuaciones Diferenciales</p>
-                                        <p class="text-sm text-blue-600">MAT114 - 5 Créditos</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-yellow-800">Física I</p>
-                                        <p class="text-sm text-yellow-600">FIS130 - 5 Créditos</p>
-                                    </div>
-                                    <div class="ramo-malla p-4 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-pointer">
-                                        <p class="font-semibold text-green-800">Estructura de Datos</p>
-                                        <p class="text-sm text-green-600">INF130 - 5 Créditos</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Más semestres... -->
-                        </div>
-                    </div>
-
-                    <!-- Ficha de Ramo (Mockup) -->
-                    <div class="mt-8 border-t pt-6">
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Detalle del Ramo Seleccionado</h3>
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h4 class="text-xl font-bold text-gray-800">INF130 - Estructura de Datos</h4>
-                            <p class="text-gray-600 mb-3">Prerrequisitos: Programación Avanzada (INF121)</p>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div><span class="font-semibold">Profesores:</span> Luis Casillas</div>
-                                <div><span class="font-semibold">Cupos:</span> 45/50</div>
-                                <div><span class="font-semibold">Sala:</span> IBC-10</div>
-                                <div><span class="font-semibold">Créditos:</span> 5</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Página: Planificar Horario -->
-            <div id="page-planificar" class="content-page hidden">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Planificar Horario</h1>
+                <!-- Alerta de conflictos -->
+                <div id="alert-conflictos" class="hidden"></div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Columna: Ramos Disponibles -->
-                    <div class="lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Ramos que puedes tomar</h2>
-                        <p class="text-sm text-gray-500 mb-4">Arrastra los ramos a tu horario para planificar tu semestre.</p>
-                        <div class="space-y-3">
-                            <div class="p-3 bg-green-100 border border-green-300 rounded-lg shadow-sm cursor-move">
-                                <p class="font-semibold text-green-800">Interacción Persona-Computador</p>
-                                <p class="text-sm text-green-600">INF238 - L/W/V 3-4</p>
-                            </div>
-                            <div class="p-3 bg-blue-100 border border-blue-300 rounded-lg shadow-sm cursor-move">
-                                <p class="font-semibold text-blue-800">Cálculo II</p>
-                                <p class="text-sm text-blue-600">MAT112 - L/W/V 1-2</p>
-                            </div>
-                            <div class="p-3 bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm cursor-move">
-                                <p class="font-semibold text-yellow-800">Física I</p>
-                                <p class="text-sm text-yellow-600">FIS130 - M/J 1-2</p>
-                            </div>
+                    <!-- Lista -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
+                        <h3 class="font-bold text-slate-700 mb-1">Ramos Disponibles</h3>
+                        <p class="text-xs text-slate-400 mb-4">Ramos pendientes o que estás cursando.</p>
+                        
+                        <div id="lista-planificacion" class="space-y-2 text-sm max-h-[400px] overflow-y-auto pr-2">
+                            <!-- JS -->
                         </div>
-                         <button class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-                            Sincronizar con Google Calendar
-                        </button>
                     </div>
 
-                    <!-- Columna: Horario Semestral -->
-                    <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Mi Horario Semestral</h2>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border-collapse border border-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Hora</th>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Lunes</th>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Martes</th>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Miércoles</th>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Jueves</th>
-                                        <th class="border border-gray-300 p-2 text-xs font-medium text-gray-500">Viernes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="text-center">
-                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">08:00-09:30</td>
-                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
-                                        <td class_name="border border-gray-200 p-2 bg-yellow-50 text-yellow-800">Física I</td>
-                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
-                                        <td class_name="border border-gray-200 p-2 bg-yellow-50 text-yellow-800">Física I</td>
-                                        <td class_name="border border-gray-200 p-2 bg-blue-50 text-blue-800">Cálculo II</td>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">09:40-11:10</td>
-                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
-                                        <td class_name="border border-gray-200 p-2"></td>
-                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
-                                        <td class_name="border border-gray-200 p-2"></td>
-                                        <td class_name="border border-gray-200 p-2 bg-green-50 text-green-800">IPO</td>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <td class="border border-gray-200 p-2 text-xs text-gray-500">11:20-12:50</td>
-                                        <td class="border border-gray-200 p-2"></td>
-                                        <td class="border border-gray-200 p-2"></td>
-                                        <td class="border border-gray-200 p-2"></td>
-                                        <td class="border border-gray-200 p-2"></td>
-                                        <td class="border border-gray-200 p-2"></td>
-                                    </tr>
-                                    <!-- Más filas de horario -->
-                                </tbody>
-                            </table>
+                    <!-- Grid Horario -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-bold text-slate-700">Horario Semestral</h3>
+                            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Visualización Semanal</span>
+                        </div>
+                        
+                        <div class="min-w-[600px] border rounded-lg overflow-hidden">
+                            <!-- Header Tabla -->
+                            <div class="grid grid-cols-6 bg-slate-50 border-b text-center text-xs font-bold text-slate-600 divide-x">
+                                <div class="py-2">Hora</div>
+                                <div class="py-2">Lun</div>
+                                <div class="py-2">Mar</div>
+                                <div class="py-2">Mié</div>
+                                <div class="py-2">Jue</div>
+                                <div class="py-2">Vie</div>
+                            </div>
+                            <!-- Cuerpo Tabla (Bloques) -->
+                            <div id="schedule-body" class="divide-y text-xs">
+                                <!-- Se genera con JS -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Página: Comunidad -->
-            <div id="page-comunidad" class="content-page hidden">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Comunidad</h1>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Card: Foros de Discusión -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Foros de Discusión</h2>
-                        <ul class="divide-y divide-gray-200">
-                            <li class="py-3 flex justify-between items-center">
-                                <div>
-                                    <p class="font-medium text-gray-800">Foro: Cálculo II</p>
-                                    <p class="text-sm text-gray-500">Último mensaje: hace 5 min</p>
-                                </div>
-                                <span class="text-sm font-semibold text-blue-600">3 nuevos</span>
-                            </li>
-                            <li class="py-3 flex justify-between items-center">
-                                <div>
-                                    <p class="font-medium text-gray-800">Foro: Interacción Persona-Computador</p>
-                                    <p class="text-sm text-gray-500">Último mensaje: hace 2 horas</p>
-                                </div>
-                                <span class="text-sm font-semibold text-blue-600">1 nuevo</span>
-                            </li>
-                            <li class="py-3 flex justify-between items-center">
-                                <div>
-                                    <p class="font-medium text-gray-800">Foro: Física I</p>
-                                    <p class="text-sm text-gray-500">Último mensaje: ayer</p>
-                                </div>
-                            </li>
-                        </ul>
+            <!-- VISTA 5: COMUNIDAD -->
+            <section id="view-comunidad" class="view-section hidden space-y-6 fade-in">
+                <h1 class="text-2xl font-bold text-slate-900">Comunidad</h1>
+                <div class="bg-white p-10 rounded-xl border border-dashed border-gray-300 text-center">
+                    <div class="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                        <i data-lucide="users" class="w-8 h-8"></i>
                     </div>
-
-                    <!-- Card: Apuntes y Consejos -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Apuntes y Consejos</h2>
-                        <input type="text" placeholder="Buscar apuntes por ramo..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4">
-                        <ul class="space-y-2">
-                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Resumen Prueba 1 - Cálculo II</a></li>
-                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Apuntes Clases de Física I (Prof. Casillas)</a></li>
-                            <li class="p-2 hover:bg-gray-50 rounded-md"><a href="#" class="font-medium text-blue-700">Tips para la Entrega 2 de IPO</a></li>
-                        </ul>
-                    </div>
+                    <h3 class="text-lg font-bold text-slate-700">Sección en Desarrollo</h3>
+                    <p class="text-slate-500">Esta funcionalidad estará disponible en la próxima iteración.</p>
                 </div>
-            </div>
-
-            <!-- Página: Perfil y Configuración -->
-            <div id="page-perfil" class="content-page hidden">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Perfil y Configuración</h1>
-                
-                <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
-                    <!-- Mi Perfil -->
-                    <div class="pb-6 border-b border-gray-200">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Mi Perfil</h2>
-                        <div class="flex items-center space-x-4 mb-4">
-                            <img class="w-16 h-16 rounded-full" src="https://placehold.co/100x100/E2E8F0/718096?text=PJ" alt="Foto de Perfil">
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-800">Pedro Jeria Donaire</h3>
-                                <p class="text-sm text-gray-500">pedro.jeria.d@alumnos.uv.cl</p>
-                            </div>
-                        </div>
-                        <button class="text-sm text-blue-600 hover:underline">Cambiar foto de perfil</button>
-                    </div>
-
-                    <!-- Configuración de la Cuenta -->
-                    <div class="py-6 border-b border-gray-200">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Configuración de la Cuenta</h2>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Cambiar Contraseña</label>
-                                <input type="password" placeholder="Nueva contraseña" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                            </div>
-                            <button class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Guardar Cambios</button>
-                        </div>
-                    </div>
-
-                    <!-- Notificaciones -->
-                    <div class="py-6 border-b border-gray-200">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Notificaciones</h2>
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="font-medium text-gray-700">Nuevas notas publicadas</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="font-medium text-gray-700">Nuevos mensajes en foros</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="font-medium text-gray-700">Recordatorios de evaluaciones</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Ayuda y Cierre de Sesión -->
-                    <div class="pt-6">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
-                            <a href="#" class="font-medium text-blue-600 hover:underline">Ayuda y Soporte Técnico</a>
-                            <button class="w-full md:w-auto bg-red-100 text-red-700 py-2 px-4 rounded-md hover:bg-red-200 transition-colors font-medium">
-                                Cerrar Sesión
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
 
         </main>
-        <!-- FIN: Contenido Principal -->
+
+        <!-- TOAST -->
+        <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-50 font-medium text-sm">
+            <i data-lucide="check-circle" class="text-green-400 w-4 h-4"></i>
+            <span id="toast-msg">Acción realizada</span>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuBtn = document.getElementById('menu-btn');
-            const closeMenuBtn = document.getElementById('close-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileLinks = document.querySelectorAll('.mobile-link');
-            const contentPages = document.querySelectorAll('.content-page');
+        // --- DATOS MAESTROS ---
+        const BLOQUES_HORARIOS = {
+            1: "08:00 - 09:30",
+            2: "09:40 - 11:10",
+            3: "11:20 - 12:50",
+            4: "14:30 - 16:00",
+            5: "16:10 - 17:40",
+            6: "17:50 - 19:20"
+        };
 
-            // Función para mostrar la página seleccionada y actualizar el enlace activo
-            function showPage(pageId) {
-                // Ocultar todas las páginas
-                contentPages.forEach(page => {
-                    page.classList.add('hidden');
-                });
+        let CATALOGO_RAMOS = [
+            // Semestre 1
+            { id: 'MAT110', nombre: 'Cálculo I', sem: 1, cred: 5, horario: [{d:1, b:1}, {d:3, b:1}], prereq: [] },
+            { id: 'MAT111', nombre: 'Álgebra I', sem: 1, cred: 5, horario: [{d:2, b:1}, {d:4, b:1}], prereq: [] },
+            { id: 'INF120', nombre: 'Intro. Programación', sem: 1, cred: 5, horario: [{d:1, b:2}, {d:3, b:2}], prereq: [] },
+            { id: 'FIS100', nombre: 'Física General', sem: 1, cred: 4, horario: [{d:5, b:1}], prereq: [] },
+            
+            // Semestre 2
+            { id: 'MAT112', nombre: 'Cálculo II', sem: 2, cred: 5, horario: [{d:1, b:3}, {d:3, b:3}], prereq: ['MAT110'] },
+            { id: 'MAT113', nombre: 'Álgebra II', sem: 2, cred: 5, horario: [{d:2, b:3}, {d:4, b:3}], prereq: ['MAT111'] },
+            { id: 'INF121', nombre: 'Programación Avanzada', sem: 2, cred: 5, horario: [{d:2, b:2}, {d:4, b:2}], prereq: ['INF120'] },
+            { id: 'QUI100', nombre: 'Química General', sem: 2, cred: 4, horario: [{d:5, b:2}], prereq: [] },
 
-                // Mostrar la página seleccionada
-                const targetPage = document.getElementById(pageId);
-                if (targetPage) {
-                    targetPage.classList.remove('hidden');
+            // Semestre 3
+            { id: 'FIS130', nombre: 'Física I', sem: 3, cred: 5, horario: [{d:5, b:1}, {d:5, b:2}], prereq: ['MAT110', 'FIS100'] },
+            { id: 'INF238', nombre: 'IPC', sem: 3, cred: 5, horario: [{d:1, b:4}], prereq: ['INF121'] },
+            { id: 'MAT220', nombre: 'Ecuaciones Diferenciales', sem: 3, cred: 5, horario: [{d:2, b:4}], prereq: ['MAT112'] },
+            { id: 'EST110', nombre: 'Estadística', sem: 3, cred: 4, horario: [{d:3, b:4}], prereq: ['MAT111'] }
+        ];
+
+        // --- ESTADO DE LA APP ---
+        let estadoUsuario = {
+            nombre: "",
+            carrera: "Ingeniería Civil Informática",
+            ramos: {},
+            horario: [],
+            semestresActivos: 3
+        };
+
+        // --- PERSISTENCIA ---
+        function guardarEstado() {
+            const data = {
+                usuario: estadoUsuario,
+                catalogo: CATALOGO_RAMOS
+            };
+            localStorage.setItem('clickmalla_data', JSON.stringify(data));
+        }
+
+        function cargarEstado() {
+            const saved = localStorage.getItem('clickmalla_data');
+            if(saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if(data.usuario && data.catalogo) {
+                        estadoUsuario = data.usuario;
+                        CATALOGO_RAMOS = data.catalogo;
+                        return true;
+                    }
+                } catch(e) {
+                    console.error("Error cargando datos", e);
                 }
+            }
+            return false;
+        }
 
-                // Actualizar el estado activo de los enlaces de navegación
-                navLinks.forEach(link => {
-                    link.classList.remove('bg-blue-800', 'font-semibold', 'text-white');
-                    link.classList.add('text-blue-100');
-                    if (link.dataset.page === pageId) {
-                        link.classList.add('bg-blue-800', 'font-semibold', 'text-white');
-                        link.classList.remove('text-blue-100');
+        // --- INICIALIZACIÓN ---
+        function init() {
+            lucide.createIcons();
+            
+            const haySesionPrevia = cargarEstado();
+            
+            if(haySesionPrevia && estadoUsuario.nombre) {
+                document.getElementById('modal-bienvenida').classList.add('hidden');
+                document.querySelectorAll('.user-name-display').forEach(el => el.innerText = estadoUsuario.nombre);
+                renderMalla();
+                renderDashboard();
+                nav('inicio');
+            } else {
+                CATALOGO_RAMOS.forEach(r => {
+                    if(!estadoUsuario.ramos[r.id]) {
+                        estadoUsuario.ramos[r.id] = { estado: 'pendiente', nota: null };
                     }
                 });
             }
+        }
 
-            // Función para abrir/cerrar el menú móvil
-            function toggleMenu() {
-                mobileMenu.classList.toggle('hidden');
+        // --- LÓGICA DE NEGOCIO ---
+        
+        function iniciarSesion() {
+            const input = document.getElementById('input-nombre-usuario');
+            if(!input.value.trim()) { alert("Ingresa un nombre"); return; }
+            
+            estadoUsuario.nombre = input.value;
+            document.querySelectorAll('.user-name-display').forEach(el => el.innerText = estadoUsuario.nombre);
+            
+            CATALOGO_RAMOS.forEach(r => {
+                if(!estadoUsuario.ramos[r.id]) {
+                    estadoUsuario.ramos[r.id] = { estado: 'pendiente', nota: null };
+                }
+            });
+            
+            document.getElementById('modal-bienvenida').classList.add('hidden');
+            guardarEstado();
+            renderMalla();
+            renderDashboard();
+        }
+
+        function resetApp() {
+            if(confirm("¿Reiniciar todo el test? Se perderán los datos ingresados.")) {
+                localStorage.removeItem('clickmalla_data');
+                location.reload();
+            }
+        }
+
+        function nav(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('nav-active');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800');
+            });
+            const active = document.getElementById('btn-' + viewId);
+            if(active) {
+                active.classList.add('nav-active');
+                active.classList.remove('text-slate-300', 'hover:bg-slate-800');
             }
 
-            // Event Listeners para los botones del menú móvil
-            menuBtn.addEventListener('click', toggleMenu);
-            closeMenuBtn.addEventListener('click', toggleMenu);
+            if(viewId === 'planificar') renderPlanificador();
+            if(viewId === 'progreso') renderHistorial();
+            if(viewId === 'inicio') renderDashboard();
+        }
 
-            // Event Listeners para los enlaces de navegación
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const pageId = link.dataset.page;
-                    showPage(pageId);
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+
+        function cambiarEstado(id, estado) {
+            estadoUsuario.ramos[id].estado = estado;
+            if(estado === 'pendiente' || estado === 'cursando') estadoUsuario.ramos[id].nota = null;
+            
+            guardarEstado();
+            renderMalla();
+            seleccionarRamo(id);
+            showToast("Malla actualizada");
+        }
+
+        function cambiarNota(id, valor) {
+            const nota = parseFloat(valor);
+            if(nota < 1.0 || nota > 7.0) {
+                alert("La nota debe estar entre 1.0 y 7.0");
+                return;
+            }
+            estadoUsuario.ramos[id].nota = nota;
+            guardarEstado();
+            showToast("Nota guardada");
+        }
+
+        function puedesCursarRamo(id) {
+            const ramo = CATALOGO_RAMOS.find(r => r.id === id);
+            if(!ramo || !ramo.prereq || ramo.prereq.length === 0) return true;
+            
+            return ramo.prereq.every(prereqId => {
+                const estado = estadoUsuario.ramos[prereqId]?.estado;
+                return estado === 'aprobado';
+            });
+        }
+
+        function agregarRamoPersonalizado() {
+            const modal = document.getElementById('modal-nuevo-ramo');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function guardarNuevoRamo() {
+            const id = document.getElementById('nuevo-ramo-id').value.trim().toUpperCase();
+            const nombre = document.getElementById('nuevo-ramo-nombre').value.trim();
+            const sem = parseInt(document.getElementById('nuevo-ramo-sem').value);
+            const cred = parseInt(document.getElementById('nuevo-ramo-cred').value);
+            
+            if(!id || !nombre || !sem || !cred) {
+                alert("Completa todos los campos obligatorios");
+                return;
+            }
+            
+            if(CATALOGO_RAMOS.find(r => r.id === id)) {
+                alert("Ya existe un ramo con ese código");
+                return;
+            }
+            
+            const nuevoRamo = {
+                id, nombre, sem, cred,
+                horario: [],
+                prereq: []
+            };
+            
+            CATALOGO_RAMOS.push(nuevoRamo);
+            estadoUsuario.ramos[id] = { estado: 'pendiente', nota: null };
+            
+            if(sem > estadoUsuario.semestresActivos) {
+                estadoUsuario.semestresActivos = sem;
+            }
+            
+            guardarEstado();
+            cerrarModalNuevoRamo();
+            renderMalla();
+            showToast(`Ramo ${nombre} agregado exitosamente`);
+        }
+
+        function cerrarModalNuevoRamo() {
+            const modal = document.getElementById('modal-nuevo-ramo');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('form-nuevo-ramo').reset();
+        }
+
+        function eliminarRamo(id) {
+            if(!confirm(`¿Eliminar el ramo ${id}? Esta acción no se puede deshacer.`)) return;
+            
+            CATALOGO_RAMOS = CATALOGO_RAMOS.filter(r => r.id !== id);
+            delete estadoUsuario.ramos[id];
+            estadoUsuario.horario = estadoUsuario.horario.filter(h => h !== id);
+            
+            CATALOGO_RAMOS.forEach(r => {
+                if(r.prereq) {
+                    r.prereq = r.prereq.filter(p => p !== id);
+                }
+            });
+            
+            guardarEstado();
+            renderMalla();
+            document.getElementById('editor-panel').innerHTML = `
+                <div class="text-center text-slate-400 py-10">
+                    <i data-lucide="mouse-pointer-click" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                    <p>Selecciona un ramo de la malla</p>
+                </div>
+            `;
+            lucide.createIcons();
+            showToast("Ramo eliminado");
+        }
+
+        function simularNotaNecesaria(id) {
+            const notaObjetivo = parseFloat(prompt("¿Qué promedio deseas alcanzar?", "5.0"));
+            if(!notaObjetivo || notaObjetivo < 1.0 || notaObjetivo > 7.0) return;
+            
+            const ramo = CATALOGO_RAMOS.find(r => r.id === id);
+            
+            let sumaNotas = 0;
+            let countNotas = 0;
+            
+            Object.keys(estadoUsuario.ramos).forEach(ramoId => {
+                const data = estadoUsuario.ramos[ramoId];
+                if(data.estado === 'aprobado' && data.nota) {
+                    sumaNotas += data.nota;
+                    countNotas++;
+                }
+            });
+            
+            const promedioActual = countNotas > 0 ? sumaNotas / countNotas : 0;
+            const notaNecesaria = (notaObjetivo * (countNotas + 1)) - sumaNotas;
+            
+            const resultado = notaNecesaria > 7.0 
+                ? `No es posible alcanzar un promedio de ${notaObjetivo} aunque obtengas 7.0 en ${ramo.nombre}.`
+                : notaNecesaria < 1.0
+                ? `¡Puedes obtener cualquier nota! Tu promedio actual ya está sobre ${notaObjetivo}.`
+                : `Necesitas sacar ${notaNecesaria.toFixed(1)} en ${ramo.nombre} para alcanzar un promedio de ${notaObjetivo}.`;
+            
+            alert(resultado);
+        }
+
+        // --- RENDERIZADORES ---
+
+        function renderMalla() {
+            const container = document.getElementById('malla-grid');
+            container.innerHTML = '';
+
+            for(let i=1; i<=estadoUsuario.semestresActivos; i++) {
+                const col = document.createElement('div');
+                col.className = "w-56 space-y-3";
+                col.innerHTML = `<h4 class="text-center text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Semestre ${i}</h4>`;
+                
+                const ramosSemestre = CATALOGO_RAMOS.filter(r => r.sem === i);
+                
+                ramosSemestre.forEach(r => {
+                    const estado = estadoUsuario.ramos[r.id]?.estado || 'pendiente';
+                    const puedeCursar = puedesCursarRamo(r.id);
+                    
+                    let estilo = "bg-white border-gray-200 text-gray-600";
+                    let icono = "";
+
+                    if(estado === 'aprobado') { 
+                        estilo = "bg-green-50 border-green-500 text-green-800"; 
+                        icono = "check"; 
+                    } else if(estado === 'reprobado') { 
+                        estilo = "bg-red-50 border-red-500 text-red-800"; 
+                        icono = "x"; 
+                    } else if(estado === 'cursando') { 
+                        estilo = "bg-blue-50 border-blue-500 text-blue-800 ring-2 ring-blue-200"; 
+                        icono = "loader"; 
+                    } else if(!puedeCursar) {
+                        estilo = "bg-gray-50 border-gray-300 text-gray-400 opacity-60";
+                        icono = "lock";
+                    }
+
+                    const prereqHTML = r.prereq && r.prereq.length > 0 
+                        ? `<div class="text-[10px] text-gray-400 mt-1">Req: ${r.prereq.join(', ')}</div>`
+                        : '';
+
+                    col.innerHTML += `
+                        <div onclick="seleccionarRamo('${r.id}')" class="cursor-pointer p-4 rounded-lg border-l-4 shadow-sm hover:shadow-md transition-all ${estilo}">
+                            <div class="flex justify-between items-start">
+                                <span class="font-bold text-sm">${r.nombre}</span>
+                                ${icono ? `<i data-lucide="${icono}" class="w-4 h-4"></i>` : ''}
+                            </div>
+                            <span class="text-xs opacity-70 mt-1 block">${r.id} • ${r.cred} créditos</span>
+                            ${prereqHTML}
+                        </div>
+                    `;
                 });
+                
+                container.appendChild(col);
+            }
+            
+            const btnCol = document.createElement('div');
+            btnCol.className = "w-56 flex flex-col gap-3";
+            btnCol.innerHTML = `
+                <button onclick="agregarSemestre()" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all text-gray-400 hover:text-indigo-600 text-sm font-bold flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar Semestre
+                </button>
+                <button onclick="agregarRamoPersonalizado()" class="p-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all text-sm font-bold flex items-center justify-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Nuevo Ramo
+                </button>
+            `;
+            container.appendChild(btnCol);
+            
+            lucide.createIcons();
+        }
+
+        function agregarSemestre() {
+            estadoUsuario.semestresActivos++;
+            guardarEstado();
+            renderMalla();
+            showToast(`Semestre ${estadoUsuario.semestresActivos} agregado`);
+        }
+
+        function seleccionarRamo(id) {
+            const ramo = CATALOGO_RAMOS.find(r => r.id === id);
+            const estadoActual = estadoUsuario.ramos[id]?.estado || 'pendiente';
+            const notaActual = estadoUsuario.ramos[id]?.nota || '';
+            const puedeCursar = puedesCursarRamo(id);
+
+            const prereqInfo = ramo.prereq && ramo.prereq.length > 0
+                ? `<div class="bg-yellow-50 border border-yellow-200 rounded p-2 mb-4 text-xs">
+                    <strong>Prerrequisitos:</strong> ${ramo.prereq.map(p => {
+                        const prereqRamo = CATALOGO_RAMOS.find(r => r.id === p);
+                        const cumple = estadoUsuario.ramos[p]?.estado === 'aprobado';
+                        const color = cumple ? 'text-green-600' : 'text-red-600';
+                        return `<span class="${color}">${prereqRamo?.nombre || p} ${cumple ? '✓' : '✗'}</span>`;
+                    }).join(', ')}
+                   </div>`
+                : '';
+
+            const bloqueado = !puedeCursar && estadoActual === 'pendiente';
+
+            const panel = document.getElementById('editor-panel');
+            panel.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">${ramo.nombre}</h3>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide">${id} • ${ramo.cred} Créditos • Sem ${ramo.sem}</p>
+                        </div>
+                        <button onclick="eliminarRamo('${id}')" class="text-red-500 hover:bg-red-50 p-2 rounded transition-colors" title="Eliminar ramo">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    ${prereqInfo}
+                    ${bloqueado ? '<div class="bg-red-50 border border-red-200 rounded p-2 mb-4 text-xs text-red-700"><strong>⚠️ Bloqueado:</strong> Debes aprobar los prerrequisitos primero.</div>' : ''}
+
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Estado</label>
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <button onclick="cambiarEstado('${id}', 'pendiente')" class="p-2 text-xs rounded border ${estadoActual==='pendiente' ? 'bg-gray-200 border-gray-400 font-bold' : 'bg-white'}">Pendiente</button>
+                        <button onclick="cambiarEstado('${id}', 'cursando')" class="p-2 text-xs rounded border ${estadoActual==='cursando' ? 'bg-blue-100 border-blue-500 text-blue-800 font-bold' : 'bg-white'}" ${bloqueado ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>Cursando</button>
+                        <button onclick="cambiarEstado('${id}', 'aprobado')" class="p-2 text-xs rounded border ${estadoActual==='aprobado' ? 'bg-green-100 border-green-500 text-green-800 font-bold' : 'bg-white'}">Aprobado</button>
+                        <button onclick="cambiarEstado('${id}', 'reprobado')" class="p-2 text-xs rounded border ${estadoActual==='reprobado' ? 'bg-red-100 border-red-500 text-red-800 font-bold' : 'bg-white'}">Reprobado</button>
+                    </div>
+
+                    ${(estadoActual === 'aprobado' || estadoActual === 'reprobado') ? `
+                        <div class="mb-4 fade-in">
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Nota Final</label>
+                            <input type="number" step="0.1" min="1.0" max="7.0" value="${notaActual}" onchange="cambiarNota('${id}', this.value)" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500" placeholder="1.0 - 7.0">
+                        </div>
+                    ` : ''}
+
+                    ${estadoActual === 'cursando' ? `
+                        <button onclick="simularNotaNecesaria('${id}')" class="w-full mt-2 bg-purple-100 text-purple-700 border border-purple-300 py-2 rounded hover:bg-purple-200 transition-colors text-sm font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="calculator" class="w-4 h-4"></i> Simular Nota Necesaria
+                        </button>
+                    ` : ''}
+
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase mb-2">Horario</h4>
+                        ${ramo.horario && ramo.horario.length > 0 
+                            ? ramo.horario.map(h => `<div class="text-xs text-slate-600">${['','Lun','Mar','Mié','Jue','Vie'][h.d]} ${BLOQUES_HORARIOS[h.b]}</div>`).join('')
+                            : '<p class="text-xs text-slate-400 italic">Sin horario asignado</p>'}
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderDashboard() {
+            let totalCreditos = 0;
+            let sumaNotas = 0;
+            let countNotas = 0;
+            let aprobados = 0;
+            let cursando = 0;
+            let reprobados = 0;
+
+            const creditosTotales = CATALOGO_RAMOS.reduce((sum, r) => sum + r.cred, 0);
+
+            Object.keys(estadoUsuario.ramos).forEach(id => {
+                const data = estadoUsuario.ramos[id];
+                const info = CATALOGO_RAMOS.find(r => r.id === id);
+                
+                if(!info) return;
+                
+                if(data.estado === 'aprobado') {
+                    totalCreditos += info.cred;
+                    aprobados++;
+                    if(data.nota) {
+                        sumaNotas += data.nota;
+                        countNotas++;
+                    }
+                } else if(data.estado === 'cursando') {
+                    cursando++;
+                } else if(data.estado === 'reprobado') {
+                    reprobados++;
+                }
             });
 
-            // Event Listeners para los enlaces del menú móvil (cierran el menú al hacer clic)
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const pageId = link.dataset.page;
-                    showPage(pageId);
-                    toggleMenu(); // Cierra el menú después de la selección
-                });
+            const promedio = countNotas > 0 ? (sumaNotas / countNotas).toFixed(1) : "0.0";
+            const porcentajeCreditos = ((totalCreditos / creditosTotales) * 100).toFixed(1);
+
+            if(aprobados === 0 && totalCreditos === 0 && cursando === 0) {
+                document.getElementById('dashboard-empty').classList.remove('hidden');
+                document.getElementById('dashboard-stats').classList.add('hidden');
+            } else {
+                document.getElementById('dashboard-empty').classList.add('hidden');
+                document.getElementById('dashboard-stats').classList.remove('hidden');
+                
+                document.getElementById('val-promedio').innerText = promedio;
+                document.getElementById('val-creditos').innerText = totalCreditos;
+                document.getElementById('val-creditos-total').innerText = creditosTotales;
+                document.getElementById('val-aprobados').innerText = aprobados;
+                document.getElementById('bar-creditos').style.width = porcentajeCreditos + "%";
+                
+                document.getElementById('val-cursando').innerText = cursando;
+                document.getElementById('val-reprobados').innerText = reprobados;
+                document.getElementById('val-porcentaje').innerText = porcentajeCreditos + "%";
+            }
+        }
+
+        function renderHistorial() {
+            const tbody = document.getElementById('tabla-historial');
+            const emptyMsg = document.getElementById('empty-historial');
+            tbody.innerHTML = '';
+            
+            let hayDatos = false;
+
+            CATALOGO_RAMOS.forEach(r => {
+                const data = estadoUsuario.ramos[r.id];
+                if(data && (data.estado === 'aprobado' || data.estado === 'reprobado')) {
+                    hayDatos = true;
+                    const colorBadge = data.estado === 'aprobado' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                    
+                    tbody.innerHTML += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">
+                                ${r.nombre} <span class="text-xs text-slate-400 ml-1 block">${r.id}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded text-xs font-bold uppercase ${colorBadge}">${data.estado}</span>
+                            </td>
+                            <td class="px-6 py-4 text-right font-mono font-bold">
+                                ${data.nota || '-'}
+                            </td>
+                        </tr>
+                    `;
+                }
             });
 
+            if(hayDatos) emptyMsg.classList.add('hidden');
+            else emptyMsg.classList.remove('hidden');
+        }
 
-            // Mostrar la página de inicio por defecto
-            showPage('page-inicio');
-        });
+        function renderPlanificador() {
+            const lista = document.getElementById('lista-planificacion');
+            const grid = document.getElementById('schedule-body');
+            lista.innerHTML = '';
+            
+            const disponibles = CATALOGO_RAMOS.filter(r => {
+                const e = estadoUsuario.ramos[r.id]?.estado;
+                return (e === 'pendiente' || e === 'cursando' || e === 'reprobado') && puedesCursarRamo(r.id);
+            });
+
+            if(disponibles.length === 0) {
+                lista.innerHTML = `<p class="text-center text-slate-400 py-4 italic">No hay ramos disponibles.</p>`;
+            }
+
+            disponibles.forEach(r => {
+                const enHorario = estadoUsuario.horario.includes(r.id);
+                const btnClass = enHorario ? "text-red-500 bg-red-50" : "text-indigo-600 bg-indigo-50";
+                const icon = enHorario ? "minus" : "plus";
+                
+                const estadoBadge = estadoUsuario.ramos[r.id].estado === 'cursando' 
+                    ? '<span class="text-[10px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded">Cursando</span>' 
+                    : '';
+
+                lista.innerHTML += `
+                    <div class="flex items-center justify-between p-3 border rounded-lg hover:border-indigo-300 transition-colors group">
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-700 text-sm">${r.nombre}</p>
+                            <p class="text-xs text-slate-400">${r.id} • ${r.cred} Créditos ${estadoBadge}</p>
+                        </div>
+                        <button onclick="toggleHorario('${r.id}')" class="p-2 rounded hover:scale-110 transition-transform ${btnClass}">
+                            <i data-lucide="${icon}" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = '';
+            const numBloques = Math.max(...Object.keys(BLOQUES_HORARIOS).map(Number));
+            
+            for(let b=1; b<=numBloques; b++) {
+                if(!BLOQUES_HORARIOS[b]) continue;
+                
+                let rowHtml = `<div class="grid grid-cols-6 divide-x border-b h-20">`;
+                rowHtml += `<div class="flex items-center justify-center text-slate-400 bg-slate-50 font-mono text-[10px] text-center p-1">${BLOQUES_HORARIOS[b]}</div>`;
+                
+                for(let d=1; d<=5; d++) {
+                    let cellContent = "";
+                    let conflicto = false;
+                    
+                    const ramosEnCelda = [];
+                    estadoUsuario.horario.forEach(ramoId => {
+                        const infoRamo = CATALOGO_RAMOS.find(r => r.id === ramoId);
+                        if(infoRamo && infoRamo.horario && infoRamo.horario.some(h => h.d === d && h.b === b)) {
+                            ramosEnCelda.push(infoRamo);
+                        }
+                    });
+                    
+                    if(ramosEnCelda.length > 1) conflicto = true;
+                    
+                    if(ramosEnCelda.length > 0) {
+                        const estiloConflicto = conflicto ? 'bg-red-100 border-red-500 text-red-800' : 'bg-indigo-100 border-indigo-500 text-indigo-800';
+                        cellContent = ramosEnCelda.map(infoRamo => `
+                            <div class="w-full h-full ${estiloConflicto} p-1 text-[10px] font-bold flex items-center justify-center text-center leading-tight border-l-4 fade-in mb-1">
+                                ${infoRamo.nombre}
+                            </div>
+                        `).join('');
+                    }
+
+                    rowHtml += `<div class="p-1 relative">${cellContent}</div>`;
+                }
+                rowHtml += `</div>`;
+                grid.innerHTML += rowHtml;
+            }
+            
+            lucide.createIcons();
+            verificarConflictosHorario();
+        }
+
+        function toggleHorario(id) {
+            if(estadoUsuario.horario.includes(id)) {
+                estadoUsuario.horario = estadoUsuario.horario.filter(h => h !== id);
+                showToast("Ramo eliminado");
+            } else {
+                estadoUsuario.horario.push(id);
+                showToast("Ramo agregado al horario");
+            }
+            guardarEstado();
+            renderPlanificador();
+        }
+
+        function verificarConflictosHorario() {
+            const conflictos = [];
+            const ocupados = {};
+            
+            estadoUsuario.horario.forEach(ramoId => {
+                const ramo = CATALOGO_RAMOS.find(r => r.id === ramoId);
+                if(!ramo || !ramo.horario) return;
+                
+                ramo.horario.forEach(h => {
+                    const key = `${h.d}-${h.b}`;
+                    if(ocupados[key]) {
+                        conflictos.push({ramo1: ocupados[key], ramo2: ramo.nombre, dia: h.d, bloque: h.b});
+                    } else {
+                        ocupados[key] = ramo.nombre;
+                    }
+                });
+            });
+            
+            const alertDiv = document.getElementById('alert-conflictos');
+            if(conflictos.length > 0) {
+                alertDiv.innerHTML = `
+                    <div class="bg-red-50 border border-red-300 rounded-lg p-3 text-sm text-red-800">
+                        <strong>⚠️ Conflictos detectados:</strong>
+                        <ul class="list-disc list-inside mt-1">
+                            ${conflictos.map(c => `<li>${c.ramo1} y ${c.ramo2} - ${['','Lun','Mar','Mié','Jue','Vie'][c.dia]} ${BLOQUES_HORARIOS[c.bloque]}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                alertDiv.classList.remove('hidden');
+            } else {
+                alertDiv.classList.add('hidden');
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 2000);
+        }
+
+        init();
     </script>
 </body>
 </html>
